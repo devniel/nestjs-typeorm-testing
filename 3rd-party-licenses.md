@@ -4,7 +4,7 @@ Thanks to:
 License: MIT
 https://github.com/nestjs/nest/blob/master/LICENSE
 
-### [typeorm] (https://github.com/typeorm/typeorm)
+### [typeorm](https://github.com/typeorm/typeorm)
 License: MIT
 https://github.com/typeorm/typeorm/blob/master/LICENSE
 
