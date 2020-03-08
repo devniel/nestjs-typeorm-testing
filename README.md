@@ -1,40 +1,8 @@
-<h1 align="center"></h1>
+With this module you don't need an access to DB to test the BeforeInsert hook of entities.
 
-<div align="center">
-  <a href="http://nestjs.com/" target="_blank">
-    <img src="https://nestjs.com/img/logo_text.svg" width="150" alt="Nest Logo" />
-  </a>
-</div>
+Based on https://github.com/typeorm/typeorm/issues/1267#issuecomment-456200490 and some debugging/reading of the typeorm flow.
 
-<h3 align="center">NestJS npm Package Starter</h3>
-
-<div align="center">
-  <a href="https://nestjs.com" target="_blank">
-    <img src="https://img.shields.io/badge/built%20with-NestJs-red.svg" alt="Built with NestJS">
-  </a>
-</div>
-
-### Installation
-
-1. Clone the repo
-2. Run npm/yarn install
-
-```bash
-cd nestjs-package-starter
-npm install
-```
-
-## Change Log
-
-See [Changelog](CHANGELOG.md) for more information.
-
-## Contributing
-
-Contributions welcome! See [Contributing](CONTRIBUTING.md).
-
-## Author
-
-**John Biundo (Y Prospect on [Discord](https://discord.gg/G7Qnnhy))**
+Created with https://github.com/nestjsplus/nestjs-package-starter.
 
 ## License
 
