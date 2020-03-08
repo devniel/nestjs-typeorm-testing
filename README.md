@@ -8,7 +8,7 @@ Created with https://github.com/nestjsplus/nestjs-package-starter.
 
 Invoke `TypeOrmTestModule.forTest` and pass as an argument an array with the entities used in the app.
 
-By now it will create fake queries against a postgresql database.
+By now it will create fake queries against a fake postgresql database connection.
 
 If your entity (e.g. `User`) has hooks like `@BeforeInsert()`, the testing module will invoke it just like a regular typeorm module when using the injected repository in the proper services.
 
