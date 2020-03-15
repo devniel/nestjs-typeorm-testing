@@ -4,6 +4,11 @@ Based on https://github.com/typeorm/typeorm/issues/1267#issuecomment-456200490 a
 
 Created with https://github.com/nestjsplus/nestjs-package-starter.
 
+## Install:
+```shell
+npm install --save-dev @devniel/nestjs-typeorm-testing
+```
+
 ## Example of use:
 
 Invoke `TypeOrmTestModule.forTest` and pass as an argument an array with the entities used in the app.
