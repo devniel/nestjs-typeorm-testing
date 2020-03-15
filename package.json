@@ -1,6 +1,6 @@
 {
   "name": "@devniel/nestjs-typeorm-testing",
-  "version": "0.0.3-alpha",
+  "version": "0.0.4-alpha",
   "description": "Typeorm testing module, initially for testing @BeforeInsert hook.",
   "author": "devniel",
   "license": "MIT",
@@ -22,7 +22,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "keywords": [
-    "nestjs"
+    "nestjs",
+    "typeorm",
+    "testing"
   ],
   "publishConfig": {
     "access": "public"
@@ -33,17 +35,16 @@
   },
   "bugs": "https://github.com/devniel/nestjs-typeorm-testing",
   "peerDependencies": {
-    "@nestjs/common": "^6.0.0"
+    "@nestjs/common": "^6.0.0",
+    "@nestjs/core": "^6.0.0",
+    "@nestjs/typeorm": "^6.3.3",
+    "rxjs": "^6.5.4"
   },
   "dependencies": {
-    "@nestjs/typeorm": "^6.3.3",
-    "rxjs": "^6.5.4",
     "sinon": "^9.0.0",
     "typeorm": "^0.2.24"
   },
   "devDependencies": {
-    "@nestjs/common": "^6.0.0",
-    "@nestjs/core": "^6.0.0",
     "@nestjs/platform-express": "^6.0.0",
     "@nestjs/testing": "6.1.1",
     "@types/express": "4.16.1",
