@@ -18,6 +18,8 @@ By now it will create fake queries against a fake postgresql database connection
 If your entity (e.g. `User`) has hooks like `@BeforeInsert()`, the testing module will invoke it just like a regular typeorm module when using the injected repository in the proper services.
 
 ```ts
+import { TypeOrmTestModule } from '@devniel/nestjs-typeorm-testing';
+
 const module: TestingModule = await Test.createTestingModule({
   controllers: [AuthResolver],
   imports: [TypeOrmTestModule.forTest([User])],
