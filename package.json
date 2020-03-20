@@ -1,6 +1,6 @@
 {
   "name": "@devniel/nestjs-typeorm-testing",
-  "version": "0.0.5-alpha",
+  "version": "0.0.6-alpha",
   "description": "Typeorm testing module, initially for testing @BeforeInsert hook.",
   "author": "devniel",
   "license": "MIT",
@@ -46,12 +46,16 @@
     "pg": "^7.18.2"
   },
   "devDependencies": {
+    "@nestjs/common": "^6.0.0",
+    "@nestjs/core": "^6.0.0",
+    "@nestjs/typeorm": "^6.3.3",
     "@nestjs/platform-express": "^6.0.0",
     "@nestjs/testing": "6.1.1",
     "@types/express": "4.16.1",
     "@types/jest": "24.0.11",
     "@types/node": "11.13.4",
     "@types/supertest": "2.0.7",
+    "rxjs": "^6.5.4",
     "jest": "^25.1.0",
     "prettier": "1.17.0",
     "supertest": "4.0.2",
@@ -61,6 +65,10 @@
     "tsconfig-paths": "3.8.0",
     "tslint": "5.16.0",
     "typescript": "3.4.3"
+  },
+  "resolutions": {
+    "**/**/minimist": "^1.2.5",
+    "**/**/acorn": "^6.4.1"
   },
   "jest": {
     "moduleFileExtensions": [
