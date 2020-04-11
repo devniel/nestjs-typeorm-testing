@@ -71,7 +71,6 @@ export class TypeOrmTestModule implements OnApplicationShutdown {
   }
 
   async onApplicationShutdown() {
-    console.log('onApplicationShutdown');
     if (this.options.keepConnectionAlive) {
       return;
     }

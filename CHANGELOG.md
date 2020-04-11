@@ -1,3 +1,6 @@
+__0.0.9-alpha__ 11-APRIL-2020
+- Removed unneccesary log.
+  
 __0.0.8-alpha__ 11-APRIL-2020
 - Added `FakeConnection` disconnection on `module.close()` or `connection.close()`.
 
