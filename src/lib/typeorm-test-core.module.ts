@@ -41,7 +41,7 @@ import {
  */
 @Global()
 @Module({})
-export class TypeOrmTestCoreModule implements OnApplicationShutdown {
+export class TypeOrmTestCoreModule {
   constructor(
     @Inject(TYPEORM_MODULE_OPTIONS)
     private readonly options: TypeOrmModuleOptions,
@@ -106,16 +106,6 @@ export class TypeOrmTestCoreModule implements OnApplicationShutdown {
       ],
       exports: [entityManagerProvider, connectionProvider],
     };
-  }
-
-  async onApplicationShutdown() {
-    if (this.options.keepConnectionAlive) {
-      return;
-    }
-    const connection = this.moduleRef.get<Connection>(
-      getConnectionToken(this.options as ConnectionOptions) as Type<Connection>,
-    );
-    connection && (await connection.close());
   }
 
   private static createAsyncProviders(

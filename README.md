@@ -38,9 +38,9 @@ const module: TestingModule = await Test.createTestingModule({
 }).compile();
 ```
 
-### Custon connection name
+### Custom connection name
 
-To provide a custon connection name, then set the first argument of `forTest` as an options object.
+To provide a custom connection name, then set the first argument of `forTest` as an options object.
 
 ```ts
 import { TypeOrmTestModule } from '@devniel/nestjs-typeorm-testing';
@@ -64,6 +64,23 @@ const module: TestingModule = await Test.createTestingModule({
     },
   ],
 }).compile();
+```
+
+### Getting the fake connection
+You can get the created fake connection and check its properties or close it.
+```ts
+import { TypeOrmTestModule } from '@devniel/nestjs-typeorm-testing';
+import { getConnectionToken } from '@nestjs/typeorm';
+
+const module: TestingModule = await Test.createTestingModule({
+  controllers: [AuthResolver],
+  imports: [TypeOrmTestModule.forTest({
+    entities: [User],
+    name: 'default2'
+  })]
+}).compile();
+const connection = module.get(getConnectionToken('default2'));
+connection.close(); // module.close() also closes the connection
 ```
 
 ## Todo:

@@ -8,6 +8,7 @@ import { Injectable } from '@nestjs/common';
 
 const CONNECTION_1_NAME = 'default1';
 const CONNECTION_2_NAME = 'default2';
+const CONNECTION_3_NAME = 'default3';
 
 @Injectable()
 export class UsersServiceConnection1 {
@@ -110,5 +111,28 @@ describe('Create multiple testing modules', () => {
       .catch(e => {
         expect(e).toBeTruthy();
       });
+  });
+  it('should disconnect and then use a connection of the same name', async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        TypeOrmTestModule.forTest({
+          entities: [User],
+          name: CONNECTION_3_NAME,
+        }),
+      ],
+    }).compile();
+    const connection = module.get<Connection>(
+      getConnectionToken(CONNECTION_3_NAME),
+    );
+    await module.close();
+    const module2: TestingModule = await Test.createTestingModule({
+      imports: [
+        TypeOrmTestModule.forTest({
+          entities: [User],
+          name: CONNECTION_3_NAME,
+        }),
+      ],
+    }).compile();
+    expect(module2).toBeTruthy();
   });
 });

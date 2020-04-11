@@ -1,9 +1,23 @@
-import { DynamicModule, Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConnectionOptions } from 'typeorm';
+import {
+  DynamicModule,
+  Module,
+  OnApplicationShutdown,
+  Inject,
+  Type,
+} from '@nestjs/common';
+import {
+  TypeOrmModule,
+  TypeOrmModuleOptions,
+  getConnectionToken,
+} from '@nestjs/typeorm';
+import { ConnectionOptions, Connection } from 'typeorm';
 
 import { TypeOrmTestCoreModule } from './typeorm-test-core.module';
-import { DEFAULT_CONNECTION_NAME } from '@nestjs/typeorm/dist/typeorm.constants';
+import {
+  DEFAULT_CONNECTION_NAME,
+  TYPEORM_MODULE_OPTIONS,
+} from '@nestjs/typeorm/dist/typeorm.constants';
+import { ModuleRef } from '@nestjs/core';
 
 interface TypeOrmTestModuleOptions {
   entities: Function[];
@@ -14,7 +28,13 @@ interface TypeOrmTestModuleOptions {
 const TYPE = 'postgres';
 
 @Module({})
-export class TypeOrmTestModule extends TypeOrmModule {
+export class TypeOrmTestModule implements OnApplicationShutdown {
+  constructor(
+    @Inject(TYPEORM_MODULE_OPTIONS)
+    private readonly options: TypeOrmModuleOptions,
+    private readonly moduleRef: ModuleRef,
+  ) {}
+
   static forTest(
     entitiesOrOptions: TypeOrmTestModuleOptions | Function[],
   ): DynamicModule {
@@ -39,7 +59,7 @@ export class TypeOrmTestModule extends TypeOrmModule {
     // The type serves as the handler to create the queries, it should be one of the
     // supported types of typeorm.
     const root = TypeOrmTestCoreModule.forRoot(options as ConnectionOptions);
-    const feature = this.forFeature(options.entities, options.name);
+    const feature = TypeOrmModule.forFeature(options.entities, options.name);
 
     const result = {
       module: TypeOrmTestModule,
@@ -48,5 +68,15 @@ export class TypeOrmTestModule extends TypeOrmModule {
     };
 
     return result;
+  }
+
+  async onApplicationShutdown() {
+    console.log('onApplicationShutdown');
+    if (this.options.keepConnectionAlive) {
+      return;
+    }
+    const connection = this.moduleRef.get<Connection>(getConnectionToken(this
+      .options as ConnectionOptions) as Type<Connection>);
+    connection && (await connection.close());
   }
 }

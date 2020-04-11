@@ -9,4 +9,7 @@ export class FakeConnection extends Connection {
   set driver(options) {
     this._driver = new FakeDriverFactory().create(this);
   }
+  async close() {
+    (this as any)['isConnected'] = false;
+  }
 }
