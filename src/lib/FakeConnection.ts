@@ -3,6 +3,7 @@ import { FakeDriverFactory } from './FakeDriverFactory';
 
 export class FakeConnection extends Connection {
   _driver: Driver;
+  // @ts-ignore
   get driver(): Driver {
     return this._driver;
   }

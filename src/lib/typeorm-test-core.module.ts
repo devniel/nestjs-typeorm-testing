@@ -13,7 +13,6 @@ import {
 } from '@nestjs/typeorm/dist/common/typeorm.utils';
 import { EntitiesMetadataStorage } from '@nestjs/typeorm/dist/entities-metadata.storage';
 import {
-  TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
 } from '@nestjs/typeorm/dist/interfaces';
 import {
