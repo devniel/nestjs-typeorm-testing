@@ -3,35 +3,28 @@ import {
   Global,
   Inject,
   Module,
-  OnApplicationShutdown,
   Provider,
-  Type,
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import {
   generateString,
-  getConnectionName,
   getConnectionToken,
   getEntityManagerToken,
-  handleRetry,
 } from '@nestjs/typeorm/dist/common/typeorm.utils';
 import { EntitiesMetadataStorage } from '@nestjs/typeorm/dist/entities-metadata.storage';
 import {
   TypeOrmModuleAsyncOptions,
   TypeOrmModuleOptions,
-  TypeOrmOptionsFactory,
 } from '@nestjs/typeorm/dist/interfaces';
 import {
   DEFAULT_CONNECTION_NAME,
   TYPEORM_MODULE_ID,
   TYPEORM_MODULE_OPTIONS,
 } from '@nestjs/typeorm/dist/typeorm.constants';
-import { defer } from 'rxjs';
 import { Connection, ConnectionOptions } from 'typeorm';
 
 import {
-  createFakeConnection,
-  getFakeConnectionManager,
+  createFakeConnection, FakeConnectionOptions,
 } from './createFakeConnection';
 
 /**
@@ -48,7 +41,11 @@ export class TypeOrmTestCoreModule {
     private readonly moduleRef: ModuleRef,
   ) {}
 
-  static forRoot(options: TypeOrmModuleOptions = {}): DynamicModule {
+  static forRoot(options: FakeConnectionOptions = {
+    type: 'postgres',
+    name: DEFAULT_CONNECTION_NAME,
+    entities: []
+  }): DynamicModule {
     const typeOrmModuleOptions = {
       provide: TYPEORM_MODULE_OPTIONS,
       useValue: options,
@@ -71,17 +68,11 @@ export class TypeOrmTestCoreModule {
     };
   }
 
-  static forRootAsync(options: TypeOrmModuleAsyncOptions): DynamicModule {
+  static forRootAsync(options: FakeConnectionOptions): DynamicModule {
     const connectionProvider = {
       provide: getConnectionToken(options as ConnectionOptions) as string,
-      useFactory: async (typeOrmOptions: TypeOrmModuleOptions) => {
-        if (options.name) {
-          return await this.createConnectionFactory({
-            ...typeOrmOptions,
-            name: options.name,
-          });
-        }
-        return await this.createConnectionFactory(typeOrmOptions);
+      useFactory: async () => {
+        return await this.createConnectionFactory(options);
       },
       inject: [TYPEORM_MODULE_OPTIONS],
     };
@@ -91,58 +82,21 @@ export class TypeOrmTestCoreModule {
       inject: [getConnectionToken(options as ConnectionOptions)],
     };
 
-    const asyncProviders = this.createAsyncProviders(options);
     return {
       module: TypeOrmTestCoreModule,
-      imports: options.imports,
       providers: [
-        ...asyncProviders,
         entityManagerProvider,
         connectionProvider,
         {
           provide: TYPEORM_MODULE_ID,
           useValue: generateString(),
         },
+        {
+          provide: TYPEORM_MODULE_OPTIONS,
+          useFactory: () => options
+        }
       ],
       exports: [entityManagerProvider, connectionProvider],
-    };
-  }
-
-  private static createAsyncProviders(
-    options: TypeOrmModuleAsyncOptions,
-  ): Provider[] {
-    if (options.useExisting || options.useFactory) {
-      return [this.createAsyncOptionsProvider(options)];
-    }
-    const useClass = options.useClass as Type<TypeOrmOptionsFactory>;
-    return [
-      this.createAsyncOptionsProvider(options),
-      {
-        provide: useClass,
-        useClass,
-      },
-    ];
-  }
-
-  private static createAsyncOptionsProvider(
-    options: TypeOrmModuleAsyncOptions,
-  ): Provider {
-    if (options.useFactory) {
-      return {
-        provide: TYPEORM_MODULE_OPTIONS,
-        useFactory: options.useFactory,
-        inject: options.inject || [],
-      };
-    }
-    // `as Type<TypeOrmOptionsFactory>` is a workaround for microsoft/TypeScript#31603
-    const inject = [
-      (options.useClass || options.useExisting) as Type<TypeOrmOptionsFactory>,
-    ];
-    return {
-      provide: TYPEORM_MODULE_OPTIONS,
-      useFactory: async (optionsFactory: TypeOrmOptionsFactory) =>
-        await optionsFactory.createTypeOrmOptions(options.name),
-      inject,
     };
   }
 
@@ -157,48 +111,22 @@ export class TypeOrmTestCoreModule {
   }
 
   private static async createConnectionFactory(
-    options: TypeOrmModuleOptions,
+    options: FakeConnectionOptions,
   ): Promise<Connection> {
-    try {
-      if (options.keepConnectionAlive) {
-        const connectionName = getConnectionName(options as ConnectionOptions);
-        const manager = getFakeConnectionManager();
-        if (manager.has(connectionName)) {
-          const connection = manager.get(connectionName);
-          if (connection.isConnected) {
-            return connection;
-          }
-        }
-      }
-    } catch {}
-
-    return await defer(
-      (): Promise<Connection> => {
-        if (!options.type) {
-          return createFakeConnection();
-        }
-        if (!options.autoLoadEntities) {
-          return createFakeConnection(options as ConnectionOptions);
-        }
-
-        const connectionToken = options.name || DEFAULT_CONNECTION_NAME;
-        let entities = options.entities;
-        if (entities) {
-          entities = entities.concat(
-            EntitiesMetadataStorage.getEntitiesByConnection(connectionToken),
-          );
-        } else {
-          entities = EntitiesMetadataStorage.getEntitiesByConnection(
-            connectionToken,
-          );
-        }
-        return createFakeConnection({
-          ...options,
-          entities,
-        } as ConnectionOptions);
-      },
-    )
-      .pipe(handleRetry(options.retryAttempts, options.retryDelay))
-      .toPromise();
+    const connectionToken = options.name || DEFAULT_CONNECTION_NAME;
+    let entities = options.entities;
+    if (entities) {
+      entities = entities.concat(
+        EntitiesMetadataStorage.getEntitiesByConnection(connectionToken),
+      );
+    } else {
+      entities = EntitiesMetadataStorage.getEntitiesByConnection(
+        connectionToken,
+      );
+    }
+    return createFakeConnection({
+      ...options,
+      entities,
+    });
   }
 }

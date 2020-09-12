@@ -24,6 +24,9 @@ describe('Entity repository provided in services', () => {
     user.name = 'test';
     user.password = 'test';
     const createdUser = await usersService.create(user);
-    console.log('createdUser:', createdUser);
+    expect(createdUser).toBeTruthy();
+    expect(createdUser).toHaveProperty('email', user.email);
+    expect(createdUser).toHaveProperty('name', user.name);
+    expect(createdUser).toHaveProperty('password', user.password);
   });
 });

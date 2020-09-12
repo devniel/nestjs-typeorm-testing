@@ -11,7 +11,6 @@ import {
   getConnectionToken,
 } from '@nestjs/typeorm';
 import { ConnectionOptions, Connection } from 'typeorm';
-
 import { TypeOrmTestCoreModule } from './typeorm-test-core.module';
 import {
   DEFAULT_CONNECTION_NAME,
@@ -58,7 +57,7 @@ export class TypeOrmTestModule implements OnApplicationShutdown {
 
     // The type serves as the handler to create the queries, it should be one of the
     // supported types of typeorm.
-    const root = TypeOrmTestCoreModule.forRoot(options as ConnectionOptions);
+    const root = TypeOrmTestCoreModule.forRootAsync(options);
     const feature = TypeOrmModule.forFeature(options.entities, options.name);
 
     const result = {
@@ -69,11 +68,8 @@ export class TypeOrmTestModule implements OnApplicationShutdown {
 
     return result;
   }
-
+  
   async onApplicationShutdown() {
-    if (this.options.keepConnectionAlive) {
-      return;
-    }
     const connection = this.moduleRef.get<Connection>(getConnectionToken(this
       .options as ConnectionOptions) as Type<Connection>);
     connection && (await connection.close());

@@ -1,6 +1,6 @@
 {
   "name": "@devniel/nestjs-typeorm-testing",
-  "version": "0.0.9-alpha",
+  "version": "0.1.0-alpha",
   "description": "Typeorm testing module, initially for testing @BeforeInsert hook.",
   "author": "devniel",
   "license": "MIT",
@@ -42,7 +42,6 @@
   },
   "dependencies": {
     "pg": "^7.18.2",
-    "sinon": "^9.0.0",
     "typeorm": "^0.2.24"
   },
   "devDependencies": {

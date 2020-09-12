@@ -5,6 +5,7 @@ import { User } from './shared/User';
 import { Connection, Repository } from 'typeorm';
 import { getConnectionToken, InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import * as typeorm from 'typeorm';
 
 const CONNECTION_1_NAME = 'default1';
 const CONNECTION_2_NAME = 'default2';
@@ -97,20 +98,23 @@ describe('Create multiple testing modules', () => {
     expect(connection2).toBeTruthy();
     expect(connection2.name).toBeTruthy();
     expect(connection.name).not.toEqual(connection2.name);
+    await module.close();
+    await module2.close();
   });
   it('should return error while creating the same connection based on its name', async () => {
-    await Test.createTestingModule({
+    const module = await Test.createTestingModule({
       imports: [TypeOrmTestModule.forTest([User])],
       providers: [UsersService],
     }).compile();
-    Test.createTestingModule({
-      imports: [TypeOrmTestModule.forTest([User])],
-      providers: [UsersService],
-    })
-      .compile()
-      .catch(e => {
-        expect(e).toBeTruthy();
-      });
+    try{
+      await Test.createTestingModule({
+          imports: [TypeOrmTestModule.forTest([User])],
+          providers: [UsersService],
+        }).compile();
+    }catch(e){
+      expect(e).toBeTruthy();
+    }
+    await module.close();
   });
   it('should disconnect and then use a connection of the same name', async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -134,5 +138,20 @@ describe('Create multiple testing modules', () => {
       ],
     }).compile();
     expect(module2).toBeTruthy();
+    await module2.close();
+  });
+  it('should restore stub of typeorm when closing the testing module', async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        TypeOrmTestModule.forTest({
+          entities: [User],
+          name: CONNECTION_3_NAME,
+        }),
+      ],
+    }).compile();
+    const connection = module.get<Connection>(
+      getConnectionToken(CONNECTION_3_NAME),
+    );
+    expect(typeorm.createConnection).not.toHaveProperty('restore');
   });
 });

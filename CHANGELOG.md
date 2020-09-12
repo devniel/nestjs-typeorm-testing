@@ -1,3 +1,9 @@
+__0.1.0-alpha__ 12-SEPTEMBER-2020
+- Fixed problem about not restoring `typeorm.createConnection` stub (removed `sinon`).
+- Internal `TypeOrmTestCoreModule.forRoot` now is async `TypeOrmTestCoreModule.forRootAsync` to wait for any pending async operation in the compilation.
+- Added chore(deps) updates from dependabot.
+- Updated tests.
+
 __0.0.9-alpha__ 11-APRIL-2020
 - Removed unneccesary log.
   
