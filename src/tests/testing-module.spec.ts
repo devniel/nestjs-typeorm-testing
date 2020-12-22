@@ -106,12 +106,12 @@ describe('Create multiple testing modules', () => {
       imports: [TypeOrmTestModule.forTest([User])],
       providers: [UsersService],
     }).compile();
-    try{
+    try {
       await Test.createTestingModule({
-          imports: [TypeOrmTestModule.forTest([User])],
-          providers: [UsersService],
-        }).compile();
-    }catch(e){
+        imports: [TypeOrmTestModule.forTest([User])],
+        providers: [UsersService],
+      }).compile();
+    } catch (e) {
       expect(e).toBeTruthy();
     }
     await module.close();

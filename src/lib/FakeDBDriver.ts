@@ -14,6 +14,6 @@ export class FakeDBDriver extends PostgresDriver {
     this.database = this.options.database;
   }
   createQueryRunner(mode): PostgresQueryRunner {
-    return new FakePostgresQueryRunner(this);
+    return new FakePostgresQueryRunner(this, 'master');
   }
 }

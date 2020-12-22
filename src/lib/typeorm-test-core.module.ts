@@ -12,9 +12,7 @@ import {
   getEntityManagerToken,
 } from '@nestjs/typeorm/dist/common/typeorm.utils';
 import { EntitiesMetadataStorage } from '@nestjs/typeorm/dist/entities-metadata.storage';
-import {
-  TypeOrmModuleOptions,
-} from '@nestjs/typeorm/dist/interfaces';
+import { TypeOrmModuleOptions } from '@nestjs/typeorm/dist/interfaces';
 import {
   DEFAULT_CONNECTION_NAME,
   TYPEORM_MODULE_ID,
@@ -23,7 +21,8 @@ import {
 import { Connection, ConnectionOptions } from 'typeorm';
 
 import {
-  createFakeConnection, FakeConnectionOptions,
+  createFakeConnection,
+  FakeConnectionOptions,
 } from './createFakeConnection';
 
 /**
@@ -40,11 +39,13 @@ export class TypeOrmTestCoreModule {
     private readonly moduleRef: ModuleRef,
   ) {}
 
-  static forRoot(options: FakeConnectionOptions = {
-    type: 'postgres',
-    name: DEFAULT_CONNECTION_NAME,
-    entities: []
-  }): DynamicModule {
+  static forRoot(
+    options: FakeConnectionOptions = {
+      type: 'postgres',
+      name: DEFAULT_CONNECTION_NAME,
+      entities: [],
+    },
+  ): DynamicModule {
     const typeOrmModuleOptions = {
       provide: TYPEORM_MODULE_OPTIONS,
       useValue: options,
@@ -92,8 +93,8 @@ export class TypeOrmTestCoreModule {
         },
         {
           provide: TYPEORM_MODULE_OPTIONS,
-          useFactory: () => options
-        }
+          useFactory: () => options,
+        },
       ],
       exports: [entityManagerProvider, connectionProvider],
     };

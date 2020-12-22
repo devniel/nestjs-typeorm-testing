@@ -1,3 +1,8 @@
+__0.1.1-alpha__ 21-DECEMBER-2020
+- Updated to typeorm ^0.2.29.
+- Updated to jest ^26.6.3.
+- Added fake `on` and `removeListener` to `fakeConnection`.
+
 __0.1.0-alpha__ 12-SEPTEMBER-2020
 - Fixed problem about not restoring `typeorm.createConnection` stub (removed `sinon`).
 - Internal `TypeOrmTestCoreModule.forRoot` now is async `TypeOrmTestCoreModule.forRootAsync` to wait for any pending async operation in the compilation.

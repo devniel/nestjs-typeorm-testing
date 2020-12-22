@@ -68,7 +68,7 @@ export class TypeOrmTestModule implements OnApplicationShutdown {
 
     return result;
   }
-  
+
   async onApplicationShutdown() {
     const connection = this.moduleRef.get<Connection>(getConnectionToken(this
       .options as ConnectionOptions) as Type<Connection>);
