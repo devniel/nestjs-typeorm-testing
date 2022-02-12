@@ -14,11 +14,15 @@ export const defaultFakeConnectionOptions: FakeConnectionOptions = {
   entities: [],
 };
 
-// The fake connection, here we can get the queries and parameters.
+// The fake connection attached to the driver and used
+// from the master connection to startup queries, no parameters provided;
+// The regular one with parameters is the one run by PostgresQueryRunner.
 export const fakeConnection = {
-  query: (query, parameters, cb) => {
+  query: (_query, cb) => {
     cb(null, {
-      rows: 0,
+      rows: [
+        { server_version: "12.0" }
+      ]
     });
   },
   // Ignore any event listener action

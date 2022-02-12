@@ -1,6 +1,6 @@
 {
   "name": "@devniel/nestjs-typeorm-testing",
-  "version": "0.1.3-alpha",
+  "version": "0.1.4-alpha",
   "description": "Typeorm testing module, initially for testing @BeforeInsert hook.",
   "author": "devniel",
   "license": "MIT",

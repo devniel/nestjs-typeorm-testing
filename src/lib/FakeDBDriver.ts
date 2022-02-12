@@ -8,7 +8,7 @@ export class FakeDBDriver extends PostgresDriver {
   async connect(): Promise<void> {
     this.master = {
       connect: cb => {
-        return cb(null, fakeConnection, {});
+        cb(null, fakeConnection, () => {});
       },
     };
     this.database = this.options.database;
