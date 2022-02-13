@@ -20,6 +20,7 @@ describe('Entity repository provided in services', () => {
 
   it('service for access entity should be defined', () => {
     expect(usersService).toBeDefined();
+    expect(usersRepository).toBeDefined();
   });
 
   it('should call the repository save() method when creating a user', async () => {

@@ -1,7 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmTestModule } from '../lib';
-import { User } from './shared/User';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { UserRepository } from './shared/UserCustomRepository';
 import { UsersServiceWithCustomRepository } from './shared/UsersServiceWithCustomRepository';
 
@@ -15,10 +13,11 @@ describe('Custom repository provided', () => {
       providers: [UsersServiceWithCustomRepository],
     }).compile();
     usersService = module.get(UsersServiceWithCustomRepository);
-    usersCustomRepository = module.get(getRepositoryToken(User));
+    usersCustomRepository = module.get(UserRepository);
   });
 
   it('repository for access entity should be defined', () => {
+    expect(usersService).toBeDefined();
     expect(usersCustomRepository).toBeDefined();
   });
 

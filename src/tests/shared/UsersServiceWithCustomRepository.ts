@@ -8,7 +8,7 @@ export class UsersServiceWithCustomRepository {
   private readonly users: User[];
 
   constructor(
-    @InjectRepository(User) private readonly userRepository: UserRepository,
+    private readonly userRepository: UserRepository,
   ) {
     this.users = [];
   }

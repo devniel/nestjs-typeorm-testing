@@ -1,3 +1,9 @@
+__0.1.5-alpha__ 13-FEBRUARY-2022
+- Support for `@nestjs/typeorm` v8.
+
+__0.1.4-alpha__ 12-FEBRUARY-2022
+- Support for typeorm ^0.2.41.
+
 __0.1.1-alpha__ 21-DECEMBER-2020
 - Updated to typeorm ^0.2.29.
 - Updated to jest ^26.6.3.
